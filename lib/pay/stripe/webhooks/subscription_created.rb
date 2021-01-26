@@ -21,7 +21,9 @@ module Pay
             subscription = Pay.subscription_model.new(name: Pay.default_product_name, owner: owner, processor: :stripe, processor_id: object.id)
           end
           
-          subscription.status = object.status
+          if subscription.status.blank?
+            subscription.status = object.status
+          end
           subscription.quantity = object.quantity
           subscription.processor_plan = object.plan.id
           subscription.trial_ends_at = Time.at(object.trial_end) if object.trial_end.present?
